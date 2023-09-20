@@ -1,0 +1,26 @@
+#!/bin/bash
+set -e
+
+hook_path="$(dirname "$0")/hooks"
+
+echo "executing before hooks"
+for before_hook in $hook_path/before-remove-node.*; do
+  bash "$before_hook" &
+done
+wait
+
+echo "before hooks complete"
+
+echo "removing node..."
+sleep 3
+echo "node removed."
+
+echo "executing after hooks"
+for after_hook in $hook_path/after-remove-node.*; do
+  bash "$after_hook" &
+done
+wait
+
+echo "after hooks complete"
+echo ""
+echo "Node removal complete."
